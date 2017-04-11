@@ -1,31 +1,44 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
 import { connect } from "react-redux"
 import {fetchDinnerIdeas} from "./actions/dinnerIdeaActions"
+=======
+import FoodIdeaRow from './components/FoodIdeaRow'
+import FoodIdeaForm from './components/FoodIdeaForm'
+
+>>>>>>> 34a48a581f46414f04762119598958d8ef6b8985
 
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
-    this.state ={
+    this.state = {
       ideas: [],
-      ideaEntry:'',
-      count:0
+      ideaEntry: '',
+      count: 0
     }
     //this.props.dispatch(fetchDinnerIdeas());
   }
 
-  addIdea(){
+  addIdea(event) {
+    event.preventDefault();
+    this.state.ideas.push({ text: this.state.ideaEntry, id: this.state.count });
 
-    this.state.ideas.push({text: this.state.ideaEntry, id:this.state.count});
-
-    this.setState({ideas: this.state.ideas});    
-    this.setState({ideaEntry: ''});
-    this.setState({count: this.state.count+1});
+    this.setState({ ideas: this.state.ideas });
+    this.setState({ ideaEntry: '' });
+    this.setState({ count: this.state.count + 1 });
     console.log(this.state.ideas);
   }
 
-  handleChange(event){
+  removeIdea(idea, event) {
+    console.log(idea);
+    const index = this.state.ideas.indexOf(idea);
+    this.state.ideas.splice(index, 1);
+    this.setState({ ideas: this.state.ideas });
+  }
+
+  handleChange(event) {
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -35,7 +48,8 @@ class App extends Component {
   }
 
   render() {
-    const ideasList = this.state.ideas.map(idea => <tr key={idea.id}><td>{idea.id}</td><td>{idea.text}</td></tr>)
+    // const ideasList = this.state.ideas.map(idea => <tr key={idea.id}><td>{idea.id}</td><td>{idea.text}</td></tr>)
+    const ideasList = this.state.ideas.map(idea => <FoodIdeaRow idea={idea} key={idea.id} removeIdea={this.removeIdea.bind(this, idea)} />)
     return (
       <div className='container'>
         <div>
@@ -45,23 +59,18 @@ class App extends Component {
         </div>
         <div className='row'>
           <div className='col-sm-6'>
-            <div className='input-group'>
-              <input type="text" name='ideaEntry' value={this.state.ideaEntry} className='form-control' onChange={this.handleChange.bind(this)}  placeholder='Enter Idea...'/>
-              <span className='input-group-btn'>
-                <button className='btn btn-primary' type='button' onClick={this.addIdea.bind(this)}>
-                  Enter Item
-                </button>
-              </span>
+            <div>
+              <FoodIdeaForm ideaEntry={this.state.ideaEntry} handleChange={this.handleChange.bind(this)} addIdea={this.addIdea.bind(this)} />
             </div>
-              <div className='panel panel-default'>
-                <div className='panel-heading'>Ideas</div>
-                <table className='table'>
-                  <tbody>
-                    {ideasList}
-                  </tbody>
-                </table>
+            <div className='panel panel-default'>
+              <div className='panel-heading'>Ideas</div>
+              <table className='table'>
+                <tbody>
+                  {ideasList}
+                </tbody>
+              </table>
             </div>
-          </div>        
+          </div>
         </div>
       </div>
     );
