@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import { connect } from "react-redux"
 import {fetchDinnerIdeas} from "./actions/dinnerIdeaActions"
-=======
 import FoodIdeaRow from './components/FoodIdeaRow'
 import FoodIdeaForm from './components/FoodIdeaForm'
-
->>>>>>> 34a48a581f46414f04762119598958d8ef6b8985
 
 
 class App extends Component {
