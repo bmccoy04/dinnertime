@@ -1,8 +1,7 @@
 import axios from "axios"
 
 export function fetchDinnerIdeas(){
-    return function(dispatch){
-        console.log(dispatch);
+    //return function(dispatch){
         // axios.get("http://localhost:3011/api/dinnerideas")
         // .then((response) => {
         //     console.log(response.data);
@@ -11,9 +10,12 @@ export function fetchDinnerIdeas(){
         // .catch((err) => {
         //     dispatch({type: "FETCH_DINNERIDEAS_REJECTED", payload: err})
         // })
-
-        dispatch({type: "FETCH_DINNERIDEAS_FULFILLED", payload: [{name: "Bryan", id:1}]})
-    }
+        return{
+            type:"FETCH_DINNERIDEAS",
+            payload: axios.get("http://localhost:3011/api/dinnerideas")//[{name: "Bryan", id:1}]
+        }
+        //dispatch({type: "FETCH_DINNERIDEAS_FULFILLED", payload: [{name: "Bryan", id:1}]})
+    //}
 }
 
 // export function addTweet(){

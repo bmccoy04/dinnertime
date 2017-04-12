@@ -4,7 +4,7 @@ export default function reducer(state={
     fetched: false,
     error: null,
 }, action){
-    console.log("action"); 
+    console.log(action.type); 
     switch(action.type){
         case "FETCH_DINNERIDEAS":{
             return {...state, fetching: true}
@@ -13,7 +13,14 @@ export default function reducer(state={
             //return {...state, fetching: false, error: action.payload}
         }
         case "FETCH_DINNERIDEAS_FULFILLED":{
-            console.log("fullfilled");
+            var s = {
+                ...state, dinnerIdeas: action.payload
+                // ...state,
+                // fetching: false,
+                // fetched: true,
+                // tweets: action.payload
+            }
+            console.log(s);
             return {
                 ...state, dinnerIdeas: action.payload
                 // ...state,
