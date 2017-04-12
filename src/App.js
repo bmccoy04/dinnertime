@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
-import {fetchDinnerIdeas} from "./actions/dinnerIdeaActions"
+import {fetchDinnerIdeas, addDinnerIdea, deleteDinnerIdea} from "./actions/dinnerIdeaActions"
 import FoodIdeaRow from './components/FoodIdeaRow'
 import FoodIdeaForm from './components/FoodIdeaForm'
 
@@ -21,19 +21,19 @@ class App extends Component {
 
   addIdea(event) {
     event.preventDefault();
-    this.state.ideas.push({ text: this.state.ideaEntry, id: this.state.count });
+    this.props.dispatch(addDinnerIdea({name: this.state.ideaEntry}))
+      .then(() => { 
+          this.props.dispatch(fetchDinnerIdeas())
+          this.setState({ ideaEntry: '' });
+        });
 
-    this.setState({ ideas: this.state.ideas });
-    this.setState({ ideaEntry: '' });
-    this.setState({ count: this.state.count + 1 });
-    console.log(this.props.dinnerIdeas.data);
   }
 
   removeIdea(idea, event) {
-    console.log(idea);
-    const index = this.state.ideas.indexOf(idea);
-    this.state.ideas.splice(index, 1);
-    this.setState({ ideas: this.state.ideas });
+    this.props.dispatch(deleteDinnerIdea(idea))
+      .then(() => {
+        this.props.dispatch(fetchDinnerIdeas());
+      });
   }
 
   handleChange(event) {
@@ -47,18 +47,16 @@ class App extends Component {
 
   render() {
     // const ideasList = this.state.ideas.map(idea => <tr key={idea.id}><td>{idea.id}</td><td>{idea.text}</td></tr>)
-    const ideasList = this.state.ideas.map(idea => <FoodIdeaRow idea={idea} key={idea.id} removeIdea={this.removeIdea.bind(this, idea)} />)
+    let ideasList = [];//this.state.ideas.map(idea => <FoodIdeaRow idea={idea} key={idea.id} removeIdea={this.removeIdea.bind(this, idea)} />)
     const list = this.props.dinnerIdeas.data;
-    let dinnerList = [];
       if(list !== undefined)
-        dinnerList = list.map(idea => <div key={idea.id}>{idea.name}</div>);
+        ideasList = list.map(idea => <FoodIdeaRow idea={idea} key={idea.id} removeIdea={this.removeIdea.bind(this, idea)} />);
     return (
       <div className='container'>
         <div>
           <h1>
             Time for Dinner!!! (ideas)
           </h1>
-          {dinnerList}
         </div>
         <div className='row'>
           <div className='col-sm-6'>
@@ -81,4 +79,7 @@ class App extends Component {
 }
 
 
-export default connect(state => ({dinnerIdeas: state.dinnerIdeas.dinnerIdeas}))(App);
+export default connect(state => ({dinnerIdeas: state.dinnerIdeas.dinnerIdeas,
+dinnerIdeasFetching: state.dinnerIdeas.fetching,
+dinnerIdeasFetched: state.dinnerIdeas.fetched,
+dinnerIdeasError: state.dinnerIdeas.error}))(App);

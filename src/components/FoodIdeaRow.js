@@ -6,7 +6,7 @@ class FooIdeaRow extends Component {
         const removeIdea = this.props.removeIdea;
         return <tr>
             <td>{idea.id} row</td>
-            <td>{idea.text}</td>
+            <td>{idea.name}</td>
             <td>
                 <div className='btn-group btn-group-sm pull-right' role='group'>
                     <button 
